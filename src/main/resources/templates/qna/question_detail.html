@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+                xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+                xmlns:sec="http://www.w3.org/1999/xhtml"
+                layout:decorate="~{layouts/layout}" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<div layout:fragment="content" class="container my-3">
+    <!-- 질문 -->
+    <h2 class="border-bottom py-2" th:text="${question.subject}">질문 제목</h2>
+    <div class="card my-3">
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;" th:text="${question.content}">질문 내용</div>
+            <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                	<div class="mb-2">
+                		<span th:if="${question.member != null}" th:text="${question.member.name}"></span>
+                	</div>
+                    <div th:text="${#temporals.format(question.regTime, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+            </div>
+            <div class="my-3">
+	            <a href="javascript:void(0)" class="recommend btn btn-sm btn-outline-secondary" 
+	               th:data-uri="@{|/question/vote/${question.id}|}">추천 <span class="badge rounded-pill bg-success" th:text="|${#lists.size(question.voter)}|"></span></a>
+            	<a th:href="@{|/question/modify/${question.id}|}" class="btn btn-sm btn-outline-secondary"
+            	   sec:authorize="isAuthenticated()" th:if="${question.member != null and #authentication.getPrincipal().getUsername() eq question.member.email}"
+            	   th:text="수정"></a>
+           	    <a href="javascript:void(0)" class="delete btn btn-sm btn-outline-secondary" th:data-uri="@{|/question/delete/${question.id}|}"
+           	       sec:authorize="isAuthenticated()" th:if="${question.member != null and #authentication.getPrincipal().getUsername() eq question.member.email}"
+           	   	   th:text="삭제"></a>
+            </div>
+            <!-- 질문글에 대한 댓글 -->
+			<div class="mt-3" th:if="${not #lists.isEmpty(question.commentList)}">
+                <div th:each="comment,index : ${question.commentList}" class="comment py-2 text-muted">
+                    <span style="white-space: pre-line;" th:text="${comment.content}"></span>
+                    <span th:if="${comment.updateTime != null}"
+                        th:text="| - ${comment.member.name}, ${#temporals.format(comment.regTime, 'yyyy-MM-dd HH:mm')} (수정: ${#temporals.format(comment.updateTime, 'yyyy-MM-dd HH:mm')})|"></span>
+                    <span th:if="${comment.updateTime == null}"
+                        th:text="| - ${comment.member.name}, ${#temporals.format(comment.regTime, 'yyyy-MM-dd HH:mm')}|"></span>
+                    <a sec:authorize="isAuthenticated()"
+                        th:if="${#authentication.getPrincipal().getUsername() == comment.member.email}"
+                        th:href="@{|/comment/modify/${comment.id}|}" class="small">수정</a>,
+                    <a sec:authorize="isAuthenticated()"
+                        th:if="${#authentication.getPrincipal().getUsername() == comment.member.email}"
+                        href="javascript:void(0);" class="small delete" th:data-uri="@{|/comment/delete/${comment.id}|}">삭제</a>
+                </div>
+            </div>
+            <div>
+                <a th:href="@{|/comment/create/question/${question.id}|}" class="small"><small>댓글 추가 ..</small></a>
+            </div>
+        </div>
+    </div>
+    <!-- 답변의 갯수 표시 -->
+    <h3 class="border-bottom my-3 py-2" 
+        th:text="|${#lists.size(question.answerList)} 개의 답변이 등록되어 있습니다|"></h3>
+    <!-- 답변 반복 시작 -->
+    <div class="card my-3" th:each="answer : ${question.answerList}">
+    	<a th:id="|answer_${answer.id}|"></a>
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;" th:text="${answer.content}"></div>
+            <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                	<div class="mb-2">
+                		<span th:if="${answer.member != null}" th:text="${answer.member.name}"></span>
+                	</div>
+                    <div th:text="${#temporals.format(answer.regTime, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+            </div>
+            <div class="my-3">
+	            <a href="javascript:void(0)" class="recommend btn btn-sm btn-outline-secondary" 
+	               th:data-uri="@{|/answer/vote/${answer.id}|}">추천 <span class="badge rounded-pill bg-success" th:text="|${#lists.size(answer.voter)}|"></span></a>
+            	<a th:href="@{|/answer/modify/${answer.id}|}" class="btn btn-sm btn-outline-secondary"
+            	   sec:authorize="isAuthenticated()" th:if="${answer.member != null and #authentication.getPrincipal().getUsername() eq answer.member.email}"
+            	   th:text="수정"></a>
+           	    <a href="javascript:void(0)" class="delete btn btn-sm btn-outline-secondary" th:data-uri="@{|/answer/delete/${answer.id}|}"
+           	       sec:authorize="isAuthenticated()" th:if="${answer.member != null and #authentication.getPrincipal().getUsername() eq answer.member.email}"
+           	   	   th:text="삭제"></a>
+            </div>
+            <!-- 답변글에 대한 댓글 -->
+			<div class="mt-3" th:if="${not #lists.isEmpty(answer.commentList)}">
+                <div th:each="comment,index : ${answer.commentList}" class="comment py-2 text-muted">
+                    <span style="white-space: pre-line;" th:text="${comment.content}"></span>
+                    <span th:if="${comment.updateTime != null}"
+                        th:text="| - ${comment.member.name}, ${#temporals.format(comment.regTime, 'yyyy-MM-dd HH:mm')} (수정: ${#temporals.format(comment.updateTime, 'yyyy-MM-dd HH:mm')})|"></span>
+                    <span th:if="${comment.updateTime == null}"
+                        th:text="| - ${comment.member.name}, ${#temporals.format(comment.regTime, 'yyyy-MM-dd HH:mm')}|"></span>
+                    <a sec:authorize="isAuthenticated()"
+                        th:if="${#authentication.getPrincipal().getUsername() == comment.member.email}"
+                        th:href="@{|/comment/modify/${comment.id}|}" class="small">수정</a>,
+                    <a sec:authorize="isAuthenticated()"
+                        th:if="${#authentication.getPrincipal().getUsername() == comment.member.email}"
+                        href="javascript:void(0);" class="small delete" th:data-uri="@{|/comment/delete/${comment.id}|}">삭제</a>
+                </div>
+            </div>
+            <div>
+                <a th:href="@{|/comment/create/answer/${answer.id}|}" class="small"><small>댓글 추가 ..</small></a>
+            </div>
+        </div>
+    </div>
+
+    <form th:action="@{|/answer/create/${question.id}|}" method="post" class="my-3" th:object="${answerDto}">
+    	<!--<div th:replace="form_errors::formErrorsFragment"></div>-->
+    	<textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
+        <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
+        <input type="submit" value="답변달기" class="btn btn-primary my-2" >
+    </form>
+</div>
+<script layout:fragment="script" type="text/javascript">
+	const delete_elements = document.getElementsByClassName("delete");
+	Array.from(delete_elements).forEach(function(element){
+		element.addEventListener('click', function(){
+			if(confirm("정말 삭제할까요?")){
+				location.href=this.dataset.uri;
+			};
+		});
+	});
+
+	const recommand_elements = document.getElementsByClassName("recommend");
+	Array.from(recommand_elements).forEach(function(element){
+		element.addEventListener('click', function(){
+			if(confirm("정말 추천할까요?")){
+				location.href=this.dataset.uri;
+			};
+		});
+	});
+</script>
+</body>
+</html>
