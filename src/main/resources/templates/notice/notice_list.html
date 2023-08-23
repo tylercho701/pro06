@@ -31,7 +31,7 @@
 	        <td >
 	          <a th:href="@{|/notice/detail/${notice.id}|}" th:text="${notice.subject}"></a>
 	        </td>
-	        <td><span th:text="${notice.createdBy}"></span></td>
+	        <td><span th:text="관리자"></span></td>
 	        <td th:text="${#temporals.format(notice.regTime,'yyyy-MM-dd HH:mm')}"></td>
 	      </tr>
 	    </tbody>
