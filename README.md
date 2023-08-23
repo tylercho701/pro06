@@ -42,19 +42,21 @@
 #
 ## 일정계획서(WBS)
 ***
-![WBS_01](/included/WBS.jpg)<br>
+![WBS](/prep/WBS_01.png)<br>
 
 #
 ## DB 설계
 ***
-![DBMS_01](/included/DB_Structure_01.jpg)<br>
-![DBMS_02](/included/DB_Structure_02.jpg)<br>
-![DBMS_03](/included/DB_Structure_03.jpg)<br>
+![DBMS_01](/prep/table_structure_01.png)<br>
+![DBMS_02](/prep/table_structure_02.png)<br>
+![DBMS_03](/prep/table_structure_03.png)<br>
+![DBMS_04](/prep/table_structure_04.png)<br>
+![DBMS_05](/prep/table_structure_05.png)<br>
 
 #
 ## ERD
 ***
-![ERD](/included/ERD.png)<br>
+![ERD](/prep/ERD_01.png)<br>
 
 #
 ## 기술스택
