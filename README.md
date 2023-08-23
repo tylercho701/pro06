@@ -144,12 +144,12 @@
 ## 최종 산출물
 ***
 ### 최종발표 PPT
-[JejuMatjipProject.pptx](/included/JejuMatjipProject.pptx)<br>
-![슬라이드1](/included/JejuMatjipProject/Slide01.JPG)<br>
-![슬라이드2](/included/JejuMatjipProject/Slide02.JPG)<br>
-![슬라이드3](/included/JejuMatjipProject/Slide03.JPG)<br>
-![슬라이드4](/included/JejuMatjipProject/Slide04.JPG)<br>
-![슬라이드5](/included/JejuMatjipProject/Slide05.JPG)<br>
-![슬라이드6](/included/JejuMatjipProject/Slide06.JPG)<br>
+[ChemicalguysMallProject.pptx](/prep/ChemicalguysProject.pptx)<br>
+![슬라이드1](/prep/ChemicalguysProject/slide_01.png)<br>
+![슬라이드2](/prep/ChemicalguysProject/slide_02.png)<br>
+![슬라이드3](/prep/ChemicalguysProject/slide_03.png)<br>
+![슬라이드4](/prep/ChemicalguysProject/slide_04.png)<br>
+![슬라이드5](/prep/ChemicalguysProject/slide_05.png)<br>
+![슬라이드6](/prep/ChemicalguysProject/slide_06.png)<br>
 
 
