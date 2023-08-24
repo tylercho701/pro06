@@ -40,4 +40,11 @@ public class Member extends BaseEntity {
         member.setMemberRole(MemberRole.USER);
         return member;
     }
+
+    public void updateMember(MemberDto memberDto, PasswordEncoder passwordEncoder){
+        this.name = memberDto.getName();
+        this.address = memberDto.getAddress();
+        String password = passwordEncoder.encode(memberDto.getPassword1());
+        this.password = password;
+    }
 }

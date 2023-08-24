@@ -1,5 +1,6 @@
 package com.chemicalguysMall.service;
 
+import com.chemicalguysMall.dto.MemberDto;
 import com.chemicalguysMall.entity.Member;
 import com.chemicalguysMall.repository.MemberRepository;
 import jakarta.transaction.Transactional;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Service;
 public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     public Member saveMember(Member member){
         validateDuplicateMember(member);
@@ -59,6 +63,11 @@ public class MemberService implements UserDetailsService {
     public void deleteMember(String email){
         Member member = memberRepository.findByEmail(email);
         memberRepository.delete(member);
+    }
+
+    public void updateMember(MemberDto memberDto) throws Exception{
+        Member member = memberRepository.findByEmail(memberDto.getEmail());
+        member.updateMember(memberDto, passwordEncoder);
     }
 
 }

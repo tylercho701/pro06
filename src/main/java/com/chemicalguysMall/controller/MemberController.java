@@ -5,6 +5,7 @@ import com.chemicalguysMall.entity.Member;
 import com.chemicalguysMall.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/member")
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
@@ -34,6 +36,7 @@ public class MemberController {
 
         if(result.hasErrors() || !memberDto.getPassword1().equals(memberDto.getPassword2())){
             model.addAttribute("memberDto", memberDto);
+            model.addAttribute("errorMessage", "비밀번호와 비밀번호확인이 서로 다릅니다. 다시 확인하시기 바랍니다.");
             return "member/memberJoin";
         }
 
@@ -70,5 +73,37 @@ public class MemberController {
         memberDto.setPassword1(member.getPassword());
         memberDto.setPassword2(member.getPassword());
         return "member/myInfo";
+    }
+
+    @PostMapping("/modify")
+    public String updateMyInfo(@Valid MemberDto memberDto, BindingResult result, Model model){
+
+        if(result.hasErrors()){
+            log.info("result : 정보 수정에 실패했습니다.");
+            log.info(memberDto.toString());
+            return "member/myInfo";
+        }
+
+        if(!memberDto.getPassword1().equals(memberDto.getPassword2())){
+            model.addAttribute("memberDto", memberDto);
+            model.addAttribute("errorMessage", "비밀번호와 비밀번호확인이 서로 다릅니다. 다시 확인하시기 바랍니다.");
+            return "member/myInfo";
+        }
+
+        try {
+            memberService.updateMember(memberDto);
+        } catch(Exception e) {
+            model.addAttribute("errorMessage", "정보 수정 중 오류가 발생했습니다.");
+        }
+
+        return "redirect:/member/myPage";
+    }
+
+    @GetMapping("/delete/{email}")
+    public String deleteMember(MemberDto memberDto, BindingResult result, Model model){
+
+        memberService.deleteMember(memberDto.getEmail());
+
+        return "redirect:/member/logout";
     }
 }
